@@ -1,6 +1,8 @@
+import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useUser } from '@/contexts/UserContext';
+import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -50,9 +52,9 @@ export default function HomeScreen() {
       {/* Add Dog Button */}
       <TouchableOpacity 
         style={styles.addButton}
-        onPress={() => navigation.navigate('../(tabs)/addPet')} 
+        onPress={() => router.push('../(tabs)/addPet')} 
       >
-        <MaterialIcons name="add-circle" size={60} color="#FFE390" />
+        <MaterialIcons name="add-circle" size={100} color="#D9D9D9" />
       </TouchableOpacity>
     </SafeAreaView>
   );

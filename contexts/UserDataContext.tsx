@@ -3,8 +3,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { databases } from "@/lib/appwrite";
 
 
-export const USER_DATABASE_ID = "67ca3cc50035cb355681"; // Replace with your database ID
-export const USER_COLLECTION_ID = "67ca3cdf00293f88ebd3"; // Replace with your collection ID
+export const USER_DATABASE_ID = "67dc12010001c35043dd"; // Replace with your database ID
+export const USER_COLLECTION_ID = "67dc120b001980acc4fb"; // Replace with your collection ID
 
 const DataContext = createContext<any>(null);
 

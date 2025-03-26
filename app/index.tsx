@@ -2,7 +2,6 @@ import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native'
 import { useState, useEffect } from 'react'
 import { Link } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { FormLabel } from '@/components/FormLabel'
 import { useUser } from '@/contexts/UserContext'
 import { router } from 'expo-router'
 import AntDesign from '@expo/vector-icons/AntDesign';

@@ -1,18 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { usePetData } from '@/contexts/PetDataContext';  // Import PetDataContext to access addPet
 
 export default function AddPetScreen() {
   const navigation = useNavigation();
+  const { addPet } = usePetData(); // Access the addPet function from PetDataContext
   const [petName, setPetName] = useState('');
   const [breed, setBreed] = useState('');
   const [dob, setDOB] = useState('');
   const [gender, setGender] = useState('');
 
-  const handleAddPet = () => {
+  const handleAddPet = async () => {
     if (petName && breed && dob && gender) {
-      console.log('Pet Added:', { petName, breed, dob, gender });
-      navigation.goBack();
+      const petData = {
+        name: petName,
+        breed: breed,
+        dob: dob,
+        gender: gender,
+      };
+
+      try {
+        // Call the addPet function from PetDataContext to add the pet to Appwrite
+        await addPet(petData);
+        console.log('Pet Added:', petData);
+        navigation.goBack(); // Go back after successfully adding the pet
+      } catch (error) {
+        console.error('Error adding pet:', error);
+        alert('There was an error adding the pet. Please try again.');
+      }
     } else {
       alert('Please fill in all fields.');
     }
@@ -21,7 +38,6 @@ export default function AddPetScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>New Dog</Text>
-
       <TextInput
         style={styles.input}
         placeholder="Pet Name"
@@ -49,17 +65,16 @@ export default function AddPetScreen() {
 
       <View style={styles.genderContainer}>
         <TouchableOpacity
-          style={[styles.genderButton, gender === 'Female' ? styles.selected : null]}
-          onPress={() => setGender('Female')}
-        >
-          <Text style={styles.genderText}>Female</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
           style={[styles.genderButton, gender === 'Male' ? styles.selected : null]}
           onPress={() => setGender('Male')}
         >
-          <Text style={styles.genderText}>Male</Text>
+          <MaterialIcons name="male" size={24} color="#00BBFF" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.genderButton, gender === 'Female' ? styles.selected : null]}
+          onPress={() => setGender('Female')}
+        >
+          <MaterialIcons name="female" size={24} color="#FF0FFB" />
         </TouchableOpacity>
       </View>
 
@@ -86,7 +101,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   input: {
-    backgroundColor: '#555469',
+    backgroundColor: '#1E1D2F',
     color: '#fff',
     padding: 15,
     borderRadius: 8,
@@ -98,18 +113,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   genderButton: {
-    backgroundColor: '#555469',
+    backgroundColor: '#1E1D2F',
     paddingVertical: 10,
     paddingHorizontal: 40,
     borderRadius: 8,
   },
   selected: {
-    backgroundColor: '#FFE390',
-  },
-  genderText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    backgroundColor: '#555469',
   },
   button: {
     backgroundColor: '#FFE390',
