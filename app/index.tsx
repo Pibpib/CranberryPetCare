@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useUser } from '@/contexts/UserContext'
 import { router } from 'expo-router'
 import AntDesign from '@expo/vector-icons/AntDesign';
+import  {Spacer}  from '@/components/Spacer'; 
 
 export default function Login() {
     const [email, setEmail] = useState("")
@@ -42,7 +43,7 @@ export default function Login() {
             <View style={styles.form}>
                 <Text style={styles.title}>Cranberry</Text>
                 <Text style={styles.title}>Dog Care</Text>
-                <br></br><br></br><br></br><br></br>
+                <View style={{ height: 30 }} />
                 <View style={styles.inputContainer}>
                     <AntDesign name="user" size={24} color="#FFE390" />
                     <TextInput
