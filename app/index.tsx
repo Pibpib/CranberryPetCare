@@ -43,7 +43,7 @@ export default function Login() {
             <View style={styles.form}>
                 <Text style={styles.title}>Cranberry</Text>
                 <Text style={styles.title}>Dog Care</Text>
-                <View style={{ height: 30 }} />
+                <Spacer height={30} />
                 <View style={styles.inputContainer}>
                     <AntDesign name="user" size={24} color="#FFE390" />
                     <TextInput
