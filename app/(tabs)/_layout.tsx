@@ -40,6 +40,13 @@ import { Tabs } from 'expo-router';
            tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
          }}
        />
+       <Tabs.Screen
+         name="reminder"
+         options={{
+           title: 'Reminder',
+           tabBarIcon: ({ color }) => <IconSymbol size={28} name="bell.fill" color={color} />,
+         }}
+       />
      </Tabs>
    );
  }
