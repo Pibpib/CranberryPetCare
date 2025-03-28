@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { databases } from "../lib/appwrite"; 
-import { PET_DATABASE_ID, PET_COLLECTION_ID } from "./PetDataContext"; 
+import { databases } from "../lib/appwrite";
+import { PET_DATABASE_ID, PET_COLLECTION_ID } from "./PetDataContext";
 
 const PetContext = createContext<any>(null);
 
@@ -11,13 +11,13 @@ export function usePet() {
 export function PetProvider(props: any) {
   const [pet, setPet] = useState<any>(null);
 
-  // Get the pet details
+  // Fetch pet details
   async function getPet(petId: string) {
     try {
       // Use databases service to fetch the pet document
       const petDetails = await databases.getDocument(
-        PET_DATABASE_ID, 
-        PET_COLLECTION_ID, 
+        PET_DATABASE_ID,
+        PET_COLLECTION_ID,
         petId
       );
       setPet(petDetails);
@@ -30,7 +30,7 @@ export function PetProvider(props: any) {
   }
 
   useEffect(() => {
-    // Fetch pet details if needed
+    // Fetch pet details if needed, depending on the use case
   }, []);
 
   return (
