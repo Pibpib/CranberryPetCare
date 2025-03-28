@@ -60,12 +60,24 @@ export function UserProvider(props: any) {
     }
   }
 
+  async function getUser() {
+    try {
+      const currentUser = await account.get();
+      setUser(currentUser);
+      return currentUser;
+    } catch (error : any) {
+      console.error("Error fetching user:", error.message);
+      setUser(null);
+      return null;
+    }
+  }  
+
   useEffect(() => {
     init();
   }, []);
 
   return (
-    <UserContext.Provider value={{ current: user, login, logout, register }}>
+    <UserContext.Provider value={{ current: user, login, logout, register, getUser }}>
       {props.children}
     </UserContext.Provider>
   );

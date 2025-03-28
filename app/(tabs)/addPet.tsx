@@ -1,12 +1,28 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect} from 'react';
+import { useUser } from '@/contexts/UserContext';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { usePetData } from '@/contexts/PetDataContext';  // Import PetDataContext to access addPet
+import { usePetData } from '@/contexts/PetDataContext';  
 
 export default function AddPetScreen() {
+  const user = useUser();
+    const [userId, setUserId] = useState<string | null>(null);
+  
+    useEffect(() => {
+      async function fetchUser() {
+        const loggedInUser = await user.getUser();
+        if (loggedInUser && loggedInUser.$id) {
+          setUserId(loggedInUser.$id);
+        }
+      }
+      fetchUser();
+    }, []);
+
   const navigation = useNavigation();
-  const { addPet } = usePetData(); // Access the addPet function from PetDataContext
+  const { addPet } = usePetData();
+
+
   const [petName, setPetName] = useState('');
   const [breed, setBreed] = useState('');
   const [dob, setDOB] = useState('');
@@ -14,26 +30,31 @@ export default function AddPetScreen() {
 
   const handleAddPet = async () => {
     if (petName && breed && dob && gender) {
+      if (!userId) {
+        alert("User ID not found. Please try again.");
+        return;
+      }
+  
       const petData = {
         name: petName,
         breed: breed,
-        dob: dob,
+        birthDate: dob,
         gender: gender,
       };
-
+  
       try {
-        // Call the addPet function from PetDataContext to add the pet to Appwrite
-        await addPet(petData);
-        console.log('Pet Added:', petData);
+        await addPet(petData, userId); // Pass userId
+        console.log("user id:", userId);
+        console.log("Pet Added:", petData);
         navigation.goBack(); // Go back after successfully adding the pet
       } catch (error) {
-        console.error('Error adding pet:', error);
-        alert('There was an error adding the pet. Please try again.');
+        console.error("Error adding pet:", error);
+        alert("There was an error adding the pet. Please try again.");
       }
     } else {
-      alert('Please fill in all fields.');
+      alert("Please fill in all fields.");
     }
-  };
+  };  
 
   return (
     <View style={styles.container}>
