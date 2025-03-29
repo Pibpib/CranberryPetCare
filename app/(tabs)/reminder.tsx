@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,9 @@ import { AntDesign } from '@expo/vector-icons';
 import ReminderForm, { ReminderData } from '@/components/ui/ReminderForm';
 import { useUser } from '@/contexts/UserContext';
 import { usePet } from '@/contexts/PetContext';
-import { createReminder } from '@/lib/appwrite';
+import { createReminder, getReminders } from '@/lib/appwrite';
+
+
 
 export default function ReminderScreen() {
   const [formVisible, setFormVisible] = useState(false);
@@ -19,6 +21,31 @@ export default function ReminderScreen() {
   
   const user = userContext?.current;
   const selectedPet = petContext?.current;
+
+  const [reminders, setReminders] = useState<ReminderData[]>([]);
+
+  useEffect(() => {
+    const fetchReminders = async () => {
+      if (!user?.$id || !selectedPet?.$id) return;
+      try {
+        const fetched = await getReminders(user.$id, selectedPet.$id);
+        console.log(fetched); // Log the response to inspect
+        const reminders = fetched.documents.map((doc: any) => ({
+          title: doc.title,
+          notes: doc.notes,
+          type: doc.type,
+          dateTime: new Date(doc.dateTime),
+          userId: doc.userId,
+          petId: doc.petId,
+        }));
+        setReminders(reminders);
+      } catch (error) {
+        console.error('Failed to fetch reminders:', error);
+      }
+    };
+  
+    fetchReminders();
+  }, [user, selectedPet]);;
 
   return (
     <View style={styles.container}>
@@ -67,6 +94,7 @@ export default function ReminderScreen() {
           try {
             await createReminder({
               ...data,
+              dateTime: new Date(data.dateTime),  // Ensure it's a Date object
               userId: user?.$id ?? '',
               petId: selectedPet?.$id ?? '',
             });

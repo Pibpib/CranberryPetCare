@@ -1,5 +1,7 @@
 import { Client, Databases, Account } from "react-native-appwrite"
 
+import { Query } from 'react-native-appwrite';
+
 const client = new Client()
 .setEndpoint("https://cloud.appwrite.io/v1")
 .setProject('67dc0ee60035456b5747')
@@ -15,28 +17,33 @@ const REMINDER_COLLECTION_ID = '67e56e4b00320f59c79d'; // replace this with your
 export async function createReminder(data: {
   title: string;
   notes: string;
-  dateTime: string;
   type: string;
+  dateTime: Date;
   userId: string;
   petId: string;
 }) {
-  return await databases.createDocument(
-    DATABASE_ID,
-    REMINDER_COLLECTION_ID,
-    ID.unique(),
-    data
-  );
+  try {
+    await databases.createDocument(
+      DATABASE_ID,
+      REMINDER_COLLECTION_ID,
+      ID.unique(),
+      {
+        title: data.title,
+        notes: data.notes,
+        type: data.type,
+        dateTime: data.dateTime,  // Store as Date object
+        userId: data.userId,
+        petId: data.petId,
+      }
+    );
+  } catch (error) {
+    console.error('Error creating reminder:', error);
+  }
 }
 
-import { Query } from 'react-native-appwrite';
-
 export async function getReminders(userId: string, petId: string) {
-  return await databases.listDocuments(
-    DATABASE_ID,
-    REMINDER_COLLECTION_ID,
-    [
-      Query.equal('userId', userId),
-      Query.equal('petId', petId),
-    ]
-  );
+  return await databases.listDocuments(DATABASE_ID, REMINDER_COLLECTION_ID, [
+    Query.equal('userId', userId),
+    Query.equal('petId', petId),
+  ]);
 }
