@@ -23,7 +23,11 @@ export interface ReminderData {
   dateTime: Date;
 }
 
-export default function ReminderForm({ visible, onClose, onSubmit }: ReminderFormProps) {
+export default function ReminderForm({
+  visible = false,
+  onClose = () => {},
+  onSubmit = () => {},
+}: Partial<ReminderFormProps>) {
   const [title, setTitle] = useState('');
   const [notes, setNotes] = useState('');
   const [type, setType] = useState('');
