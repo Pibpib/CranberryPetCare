@@ -88,12 +88,16 @@ export function PetDataProvider(props: any) {
     }
   }
 
+  function refreshPets() {
+    initPets();
+  }
+
   useEffect(() => {
     initPets();
   }, []);
 
   return (
-    <PetDataContext.Provider value={{ current: pets, addPet, modifyPet, removePet }}>
+    <PetDataContext.Provider value={{ current: pets, refreshPets, addPet, modifyPet, removePet }}>
       {props.children}
     </PetDataContext.Provider>
   );
