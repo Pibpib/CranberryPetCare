@@ -15,9 +15,12 @@ import { usePet } from '@/contexts/PetContext';
 
 export default function ReminderScreen() {
   const [formVisible, setFormVisible] = useState(false);
-  const { current: user } = useUser();
-  const { current: selectedPet } = usePet();
+  const userContext = useUser();
+  const petContext = usePet();
   
+  const user = userContext?.current;
+  const selectedPet = petContext?.current;
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Schedule</Text>
