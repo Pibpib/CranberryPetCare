@@ -17,8 +17,15 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <UserProvider value={user}>
-        <PetDataProvider> {/* Wrap with PetDataProvider */}
-          <Stack screenOptions={{ headerShown: false }} />
+        <PetDataProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            {/* Only render tabs if user is logged in */}
+            {user?.user ? (
+              <Stack.Screen name="(tabs)" />
+            ) : (
+              <Stack.Screen name="signup" />
+            )}
+          </Stack>
         </PetDataProvider>
       </UserProvider>
       <StatusBar style="auto" />

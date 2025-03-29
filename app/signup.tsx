@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useUser } from '@/contexts/UserContext';
 import { router } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { Spacer } from '@/components/Spacer';
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -52,7 +53,7 @@ export default function Signup() {
     <SafeAreaView style={styles.container}>
       <View style={styles.form}>
         <Text style={styles.title}>Sign Up</Text>
-        <br /><br /><br /><br />
+        <Spacer height={30} />
         
         {/* Email Input */}
         <View style={styles.inputContainer}>
