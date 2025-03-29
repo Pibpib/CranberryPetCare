@@ -27,3 +27,16 @@ export async function createReminder(data: {
     data
   );
 }
+
+import { Query } from 'react-native-appwrite';
+
+export async function getReminders(userId: string, petId: string) {
+  return await databases.listDocuments(
+    DATABASE_ID,
+    REMINDER_COLLECTION_ID,
+    [
+      Query.equal('userId', userId),
+      Query.equal('petId', petId),
+    ]
+  );
+}
