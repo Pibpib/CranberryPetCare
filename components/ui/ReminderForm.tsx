@@ -14,6 +14,8 @@ interface ReminderFormProps {
   visible: boolean;
   onClose: () => void;
   onSubmit: (data: ReminderData) => void;
+  userId: string;
+  petId: string;
 }
 
 export interface ReminderData {
@@ -21,13 +23,17 @@ export interface ReminderData {
   notes: string;
   type: string;
   dateTime: Date;
+  userId: string;
+  petId: string;
 }
 
 export default function ReminderForm({
   visible = false,
   onClose = () => {},
   onSubmit = () => {},
-}: Partial<ReminderFormProps>) {
+  userId,
+  petId,
+}: ReminderFormProps) {
   const [title, setTitle] = useState('');
   const [notes, setNotes] = useState('');
   const [type, setType] = useState('');
@@ -35,7 +41,7 @@ export default function ReminderForm({
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleSubmit = () => {
-    onSubmit({ title, notes, type, dateTime });
+    onSubmit({ title, notes, type, dateTime, userId, petId });
     onClose(); // close after submit
   };
 

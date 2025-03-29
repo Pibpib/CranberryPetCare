@@ -8,10 +8,16 @@ import {
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import ReminderForm, { ReminderData } from '@/components/ui/ReminderForm';
+import { useUser } from '@/contexts/UserContext';
+import { usePet } from '@/contexts/PetContext';
+
+
 
 export default function ReminderScreen() {
   const [formVisible, setFormVisible] = useState(false);
-
+  const { current: user } = useUser();
+  const { current: selectedPet } = usePet();
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Schedule</Text>
@@ -53,6 +59,8 @@ export default function ReminderScreen() {
       <ReminderForm
         visible={formVisible}
         onClose={() => setFormVisible(false)}
+        userId={user?.$id || ''}
+        petId={selectedPet?.$id || ''}
         onSubmit={(data: ReminderData) => {
           console.log('Form submitted:', data);
           setFormVisible(false);
