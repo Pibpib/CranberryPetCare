@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Platform,
+  Platform
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -26,74 +26,64 @@ export interface ReminderData {
 export default function ReminderForm({ visible, onClose, onSubmit }: ReminderFormProps) {
   const [title, setTitle] = useState('');
   const [notes, setNotes] = useState('');
-  const [type, setType] = useState('General');
+  const [type, setType] = useState('');
   const [dateTime, setDateTime] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const handleDateChange = (_event: any, selectedDate?: Date) => {
-    setShowDatePicker(false);
-    if (selectedDate) {
-      setDateTime(selectedDate);
-    }
-  };
-
   const handleSubmit = () => {
-    if (title.trim() === '') return;
     onSubmit({ title, notes, type, dateTime });
-    setTitle('');
-    setNotes('');
-    setType('General');
-    setDateTime(new Date());
-    onClose();
+    onClose(); // close after submit
   };
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
       <View style={styles.overlay}>
-        <View style={styles.container}>
-          <Text style={styles.heading}>New Reminder</Text>
+        <View style={styles.modal}>
+          <Text style={styles.heading}>Add Reminder</Text>
 
           <TextInput
-            placeholder="Title"
             style={styles.input}
+            placeholder="Title"
             value={title}
             onChangeText={setTitle}
           />
 
           <TextInput
-            placeholder="Notes (optional)"
             style={styles.input}
+            placeholder="Notes"
             value={notes}
             onChangeText={setNotes}
           />
 
           <TextInput
-            placeholder="Type (e.g. Vet, Grooming)"
             style={styles.input}
+            placeholder="Type (e.g., Vet, Grooming)"
             value={type}
             onChangeText={setType}
           />
 
-          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-            <Text style={styles.dateButton}>Pick Date & Time</Text>
+          <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
+            <Text>{dateTime.toLocaleString()}</Text>
           </TouchableOpacity>
-          <Text style={styles.preview}>Selected: {dateTime.toLocaleString()}</Text>
 
           {showDatePicker && (
             <DateTimePicker
               value={dateTime}
               mode="datetime"
               display={Platform.OS === 'ios' ? 'inline' : 'default'}
-              onChange={handleDateChange}
+              onChange={(event, selectedDate) => {
+                setShowDatePicker(false);
+                if (selectedDate) setDateTime(selectedDate);
+              }}
             />
           )}
 
-          <View style={styles.actions}>
-            <TouchableOpacity onPress={onClose} style={styles.cancelBtn}>
-              <Text>Cancel</Text>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity onPress={onClose} style={styles.buttonCancel}>
+              <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleSubmit} style={styles.submitBtn}>
-              <Text style={{ color: '#fff' }}>Save</Text>
+            <TouchableOpacity onPress={handleSubmit} style={styles.buttonSubmit}>
+              <Text style={styles.buttonText}>Add</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -105,52 +95,48 @@ export default function ReminderForm({ visible, onClose, onSubmit }: ReminderFor
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: '#000000AA',
     justifyContent: 'center',
-    alignItems: 'center',
+    padding: 20,
   },
-  container: {
-    width: '90%',
-    backgroundColor: '#1E1E3F',
-    borderRadius: 12,
+  modal: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
     padding: 20,
   },
   heading: {
     fontSize: 20,
-    fontWeight: '700',
-    color: '#FFF',
+    fontWeight: 'bold',
     marginBottom: 12,
   },
   input: {
-    backgroundColor: '#2E2E4D',
-    color: '#FFF',
+    borderWidth: 1,
+    borderColor: '#ccc',
     borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginBottom: 10,
+    padding: 10,
+    marginVertical: 6,
   },
-  dateButton: {
-    color: '#FFE390',
-    fontWeight: '600',
-    marginBottom: 6,
-  },
-  preview: {
-    color: '#CCC',
-    marginBottom: 10,
-  },
-  actions: {
+  buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 12,
   },
-  cancelBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+  buttonCancel: {
+    backgroundColor: '#999',
+    padding: 10,
+    borderRadius: 6,
+    flex: 1,
+    marginRight: 6,
   },
-  submitBtn: {
-    backgroundColor: '#FFE390',
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+  buttonSubmit: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 6,
+    flex: 1,
+    marginLeft: 6,
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
   },
 });

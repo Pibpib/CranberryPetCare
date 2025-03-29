@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,8 +7,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import ReminderForm, { ReminderData } from '@/components/ui/ReminderForm';
 
 export default function ReminderScreen() {
+  const [formVisible, setFormVisible] = useState(false);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Schedule</Text>
@@ -43,9 +46,18 @@ export default function ReminderScreen() {
         </View>
       </ScrollView>
 
-      <TouchableOpacity style={styles.fab}>
+      <TouchableOpacity style={styles.fab} onPress={() => setFormVisible(true)}>
         <AntDesign name="plus" size={24} color="#1C1C2E" />
       </TouchableOpacity>
+
+      <ReminderForm
+        visible={formVisible}
+        onClose={() => setFormVisible(false)}
+        onSubmit={(data: ReminderData) => {
+          console.log('Form submitted:', data);
+          setFormVisible(false);
+        }}
+      />
     </View>
   );
 }
