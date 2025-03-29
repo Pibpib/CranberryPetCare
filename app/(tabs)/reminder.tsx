@@ -10,8 +10,7 @@ import { AntDesign } from '@expo/vector-icons';
 import ReminderForm, { ReminderData } from '@/components/ui/ReminderForm';
 import { useUser } from '@/contexts/UserContext';
 import { usePet } from '@/contexts/PetContext';
-
-
+import { createReminder } from '@/lib/appwrite';
 
 export default function ReminderScreen() {
   const [formVisible, setFormVisible] = useState(false);
@@ -64,9 +63,19 @@ export default function ReminderScreen() {
         onClose={() => setFormVisible(false)}
         userId={user?.$id || ''}
         petId={selectedPet?.$id || ''}
-        onSubmit={(data: ReminderData) => {
-          console.log('Form submitted:', data);
-          setFormVisible(false);
+        onSubmit={async (data: ReminderData) => {
+          try {
+            await createReminder({
+              ...data,
+              userId: user?.$id ?? '',
+              petId: selectedPet?.$id ?? '',
+            });
+            console.log('Reminder saved to Appwrite!');
+          } catch (error) {
+            console.error('Error saving reminder:', error);
+          } finally {
+            setFormVisible(false);
+          }
         }}
       />
     </View>
