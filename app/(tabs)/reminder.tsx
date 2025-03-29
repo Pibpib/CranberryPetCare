@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,61 +8,42 @@ import {
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import ReminderForm, { ReminderData } from '@/components/ui/ReminderForm';
-import { useUser } from '@/contexts/UserContext';
-import { usePet } from '@/contexts/PetContext';
-import { createReminder, getReminders } from '@/lib/appwrite';
 
 export default function ReminderScreen() {
   const [formVisible, setFormVisible] = useState(false);
-  const { current: user } = useUser();
-  const { selectedPet } = usePet();
-  const [reminders, setReminders] = useState<ReminderData[]>([]);
-
-  useEffect(() => {
-    const fetchReminders = async () => {
-      if (!user?.$id || !selectedPet?.$id) return;
-      try {
-        const res = await getReminders(user.$id, selectedPet.$id);
-        const mappedReminders: ReminderData[] = res.documents.map((doc: any) => ({
-          title: doc.title,
-          notes: doc.notes,
-          type: doc.type,
-          dateTime: new Date(doc.dateTime),
-        }));
-        setReminders(mappedReminders);
-      } catch (err) {
-        console.error('Failed to fetch reminders:', err);
-      }
-    };
-
-    fetchReminders();
-  }, [user, selectedPet]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Schedule</Text>
       <Text style={styles.subTitle}>Today, Mon, 10 Mar</Text>
-      {reminders.length === 0 && (
-        <Text style={styles.noEvent}>No events — Enjoy your day!</Text>
-      )}
+      <Text style={styles.noEvent}>No events{''}Enjoy your day!</Text>
 
       <ScrollView style={styles.scrollArea}>
-        {reminders.map((reminder, index) => (
-          <View key={index}>
-            <Text style={styles.dateHeader}>
-              {new Date(reminder.dateTime).toDateString()}
-            </Text>
-            <View style={styles.eventBlock}>
-              <AntDesign name="calendar" size={16} color="#fff" style={styles.icon} />
-              <View>
-                <Text style={styles.eventTitle}>{reminder.title}</Text>
-                <Text style={styles.eventTime}>
-                  {new Date(reminder.dateTime).toLocaleTimeString()}
-                </Text>
-              </View>
-            </View>
+        <Text style={styles.dateHeader}>Sat, 15 Mar</Text>
+        <View style={styles.eventBlock}>
+          <AntDesign name="calendar" size={16} color="#fff" style={styles.icon} />
+          <View>
+            <Text style={styles.eventTitle}>Oreo's 1st Birthday</Text>
+            <Text style={styles.eventTime}>all day</Text>
           </View>
-        ))}
+        </View>
+
+        <View style={styles.eventBlock}>
+          <AntDesign name="calendar" size={16} color="#fff" style={styles.icon} />
+          <View>
+            <Text style={styles.eventTitle}>Camil Doctor Appointment</Text>
+            <Text style={styles.eventTime}>13:00 - 15:00</Text>
+          </View>
+        </View>
+
+        <Text style={styles.dateHeader}>Mon, 17 Mar</Text>
+        <View style={styles.eventBlock}>
+          <AntDesign name="calendar" size={16} color="#fff" style={styles.icon} />
+          <View>
+            <Text style={styles.eventTitle}>Camil Grooming</Text>
+            <Text style={styles.eventTime}>11:00</Text>
+          </View>
+        </View>
       </ScrollView>
 
       <TouchableOpacity style={styles.fab} onPress={() => setFormVisible(true)}>
@@ -72,27 +53,8 @@ export default function ReminderScreen() {
       <ReminderForm
         visible={formVisible}
         onClose={() => setFormVisible(false)}
-        onSubmit={async (data: ReminderData) => {
-          try {
-            await createReminder({
-              ...data,
-              dateTime: data.dateTime.toISOString(),
-              userId: user?.$id || '',
-              petId: selectedPet?.$id || '',
-            });
-
-            const res = await getReminders(user?.$id || '', selectedPet?.$id || '');
-            const mappedReminders: ReminderData[] = res.documents.map((doc: any) => ({
-              title: doc.title,
-              notes: doc.notes,
-              type: doc.type,
-              dateTime: new Date(doc.dateTime),
-            }));
-            setReminders(mappedReminders);
-            console.log('Reminder added and list updated');
-          } catch (error) {
-            console.error('Failed to create reminder:', error);
-          }
+        onSubmit={(data: ReminderData) => {
+          console.log('Form submitted:', data);
           setFormVisible(false);
         }}
       />
@@ -138,7 +100,8 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     marginBottom: 10,
-  },  icon: {
+  },
+  icon: {
     marginRight: 10,
   },
   eventTitle: {
