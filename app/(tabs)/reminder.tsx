@@ -138,8 +138,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     marginBottom: 10,
-  },
-  icon: {
+  },  icon: {
     marginRight: 10,
   },
   eventTitle: {
