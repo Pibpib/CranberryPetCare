@@ -2,8 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { databases } from "@/lib/appwrite";
 import { ID, Permission, Role, Query } from "react-native-appwrite";
 
-export const REMINDER_DATABASE_ID = "67dc12010001c35043dd"; // Replace with your database ID
-export const REMINDER_COLLECTION_ID = "67e56e4b00320f59c79d"; // Replace with your collection ID
+export const REMINDER_DATABASE_ID = "67dc12010001c35043dd"; 
+export const REMINDER_COLLECTION_ID = "67e56e4b00320f59c79d"; 
 
 const ReminderDataContext = createContext<any>(null);
 
