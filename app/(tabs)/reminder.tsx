@@ -12,8 +12,6 @@ import { useUser } from '@/contexts/UserContext';
 import { usePet } from '@/contexts/PetContext';
 import { createReminder, getReminders } from '@/lib/appwrite';
 
-
-
 export default function ReminderScreen() {
   const [formVisible, setFormVisible] = useState(false);
   const userContext = useUser();
@@ -21,6 +19,8 @@ export default function ReminderScreen() {
   
   const user = userContext?.current;
   const selectedPet = petContext?.current;
+  const today = new Date();
+  const formattedToday = today.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
 
   const [reminders, setReminders] = useState<ReminderData[]>([]);
 
@@ -45,40 +45,29 @@ export default function ReminderScreen() {
     };
   
     fetchReminders();
-  }, [user, selectedPet]);;
+  }, [user, selectedPet]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Schedule</Text>
-      <Text style={styles.subTitle}>Today, Mon, 10 Mar</Text>
-      <Text style={styles.noEvent}>No events{''}Enjoy your day!</Text>
-
+      <Text style={styles.subTitle}>{`Today, ${formattedToday}`}</Text>
+      
       <ScrollView style={styles.scrollArea}>
-        <Text style={styles.dateHeader}>Sat, 15 Mar</Text>
-        <View style={styles.eventBlock}>
-          <AntDesign name="calendar" size={16} color="#fff" style={styles.icon} />
-          <View>
-            <Text style={styles.eventTitle}>Oreo's 1st Birthday</Text>
-            <Text style={styles.eventTime}>all day</Text>
-          </View>
-        </View>
-
-        <View style={styles.eventBlock}>
-          <AntDesign name="calendar" size={16} color="#fff" style={styles.icon} />
-          <View>
-            <Text style={styles.eventTitle}>Camil Doctor Appointment</Text>
-            <Text style={styles.eventTime}>13:00 - 15:00</Text>
-          </View>
-        </View>
-
-        <Text style={styles.dateHeader}>Mon, 17 Mar</Text>
-        <View style={styles.eventBlock}>
-          <AntDesign name="calendar" size={16} color="#fff" style={styles.icon} />
-          <View>
-            <Text style={styles.eventTitle}>Camil Grooming</Text>
-            <Text style={styles.eventTime}>11:00</Text>
-          </View>
-        </View>
+        {reminders.length > 0 ? (
+          reminders.map((reminder, index) => (
+            <View key={index} style={styles.eventBlock}>
+              <AntDesign name="calendar" size={16} color="#fff" style={styles.icon} />
+              <View>
+                <Text style={styles.eventTitle}>{reminder.title}</Text>
+                <Text style={styles.eventTime}>
+                  {reminder.dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </Text>
+              </View>
+            </View>
+          ))
+        ) : (
+          <Text style={styles.noEvent}>No events. Enjoy your day!</Text>
+        )}
       </ScrollView>
 
       <TouchableOpacity style={styles.fab} onPress={() => setFormVisible(true)}>
@@ -94,11 +83,12 @@ export default function ReminderScreen() {
           try {
             await createReminder({
               ...data,
-              dateTime: new Date(data.dateTime),  // Ensure it's a Date object
+              dateTime: new Date(data.dateTime),
               userId: user?.$id ?? '',
               petId: selectedPet?.$id ?? '',
             });
             console.log('Reminder saved to Appwrite!');
+            // Optionally re-fetch reminders here to update the UI
           } catch (error) {
             console.error('Error saving reminder:', error);
           } finally {
@@ -133,13 +123,6 @@ const styles = StyleSheet.create({
     color: '#aaa',
     fontSize: 14,
     marginBottom: 20,
-  },
-  dateHeader: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginTop: 10,
-    marginBottom: 6,
   },
   eventBlock: {
     flexDirection: 'row',
