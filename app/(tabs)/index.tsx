@@ -85,7 +85,13 @@ export default function HomeScreen() {
               </View>
 
               <View style={styles.buttonsContainer}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => router.push({
+                    pathname: "../(tabs)/addLog",
+                    params: { dogId: item.dogId }
+                  })}
+                >
                   <AntDesign name="filetext1" size={24} color="black" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button}>

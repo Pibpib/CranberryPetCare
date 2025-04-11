@@ -2,8 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { databases } from "@/lib/appwrite";
 import { ID, Permission, Role, Query } from "react-native-appwrite";
 
-export const PET_DATABASE_ID = "67dc12010001c35043dd"; // Your database ID
-export const PET_COLLECTION_ID = "67e0b901000189989423"; // Your collection ID
+export const PET_DATABASE_ID = "67dc12010001c35043dd"; 
+export const PET_COLLECTION_ID = "67e0b901000189989423"; 
 
 const PetDataContext = createContext<any>(null);
 
@@ -17,26 +17,24 @@ export function PetDataProvider(props: any) {
   // Add a new pet
   async function addPet(pet: any, userId: string) {
     try {
-      // Ensure that dogId is included (use a unique value or generate one)
       const petData = { 
         ...pet, 
         userId: userId, 
-        dogId: ID.unique() // or any other value that uniquely identifies the dog
+        dogId: ID.unique() 
       };
       
       const response = await databases.createDocument(
         PET_DATABASE_ID,
         PET_COLLECTION_ID,
-        ID.unique(), // Generate a unique ID for the pet
-        petData, // The pet data including dogId
+        ID.unique(),
+        petData, 
         [
-          Permission.write(Role.user(userId)),  // Grant write permission to the user
-          Permission.read(Role.user(userId)),   // Grant read permission to the user
+          Permission.write(Role.user(userId)),  
+          Permission.read(Role.user(userId)),  
         ]
       );
     
       console.log("Pet Added:", response);
-      // Optionally update the pets list after adding a new pet
     } catch (error) {
       console.error("Failed to add pet:", error);
     }

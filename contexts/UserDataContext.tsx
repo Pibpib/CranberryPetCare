@@ -3,8 +3,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { databases } from "@/lib/appwrite";
 
 
-export const USER_DATABASE_ID = "67dc12010001c35043dd"; // Replace with your database ID
-export const USER_COLLECTION_ID = "67dc120b001980acc4fb"; // Replace with your collection ID
+export const USER_DATABASE_ID = "67dc12010001c35043dd";
+export const USER_COLLECTION_ID = "67dc120b001980acc4fb"; 
 
 const DataContext = createContext<any>(null);
 
@@ -30,7 +30,7 @@ export function DataProvider(props:any) {
   async function remove(id:string) {
     await databases.deleteDocument(USER_DATABASE_ID, USER_COLLECTION_ID, id);
     setIdeas((ideas:any) => ideas.filter((idea:any) => idea.$id !== id));
-    await init(); // Refetch ideas to ensure we have 10 items
+    await init(); 
   }
 
   async function init() {
