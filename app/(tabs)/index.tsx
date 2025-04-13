@@ -94,7 +94,12 @@ export default function HomeScreen() {
                 >
                   <AntDesign name="filetext1" size={24} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button}
+                  onPress={() => router.push({
+                    pathname: "../(tabs)/addVaccine",
+                    params: { dogId: item.dogId }
+                  })}
+                >
                   <MaterialIcons name="vaccines" size={24} color="black" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button}>

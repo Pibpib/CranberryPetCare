@@ -1,69 +1,60 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useUser } from '@/contexts/UserContext';
-import { useLogData } from '@/contexts/LogDataContext';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { ID } from "react-native-appwrite";  
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { router } from 'expo-router';
+import { useUser } from '@/contexts/UserContext';
+import { useVaccineData } from '@/contexts/VaccineDataContext';
+import { useRoute } from '@react-navigation/native'; 
 
-export default function AddLogScreen() {
+export default function AddVaccineScreen() {
+  const navigation = useNavigation();
+  const { addVaccine } = useVaccineData();
   const user = useUser();
-  const { add } = useLogData(); 
   const [userId, setUserId] = useState<string | null>(null);
-  const [eventName, setEventName] = useState('');
-  const [eventDescription, setEventDescription] = useState('');
-  const [eventDate, setEventDate] = useState('');
+  const route = useRoute();
+  const { dogId } = route.params as { dogId: string };
 
-  type RouteParams = {
-    AddLogScreen: {
-      dogId: string;
-    };
-  };
-  
-  const route = useRoute<RouteProp<RouteParams, 'AddLogScreen'>>();
-  const { dogId } = route.params;
-  
+  const [vaccineName, setVaccineName] = useState('');
+  const [applicationDate, setApplicationDate] = useState('');
+  const [expirationDate, setExpirationDate] = useState('');
+
   useEffect(() => {
     async function fetchUser() {
       const loggedInUser = await user.getUser();
-      if (loggedInUser && loggedInUser.$id) {
+      if (loggedInUser?.$id) {
         setUserId(loggedInUser.$id);
       }
     }
     fetchUser();
   }, []);
 
-  const navigation = useNavigation();
-
-  // Function to handle the saving of the log
-  const handleSaveLog = async () => {
-    if (!eventName || !eventDescription || !eventDate) {
-      alert("Please fill out all fields");
+  const handleAddVaccine = async () => {
+    if (!vaccineName || !applicationDate || !expirationDate) {
+      alert("Please fill in all fields.");
       return;
     }
 
-    if (!userId || !dogId) {
-      alert("User ID or Dog ID is missing");
+    if (!userId) {
+      alert("User ID not found.");
       return;
     }
 
-    const newLog = {
-      activityId: ID.unique(),
-      activityName: eventName,
-      activityDescription: eventDescription,
-      activityDate: eventDate,
-      userId: userId,
-      dogId: dogId,  // Include the dogId when creating the log
+    const vaccineData = {
+      vaccineName,
+      applicationDate,
+      expirationDate,
+      userId,
+      dogId
     };
 
-    // Add the log using the context's add function
     try {
-      await add(newLog);  // Add log to Appwrite
-      alert("Log added successfully!");
-      navigation.goBack(); // Navigate back after saving the log
+      await addVaccine(vaccineData);
+      console.log("Vaccine added:", vaccineData);
+      router.push('../(tabs)/');
     } catch (error) {
-      alert("Failed to add log, please try again.");
+      console.error("Error adding vaccine:", error);
+      alert("Failed to add vaccine. Please try again.");
     }
   };
 
@@ -73,43 +64,41 @@ export default function AddLogScreen() {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MaterialIcons name="arrow-back" size={30} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.title}>Add Log</Text>
+        <Text style={styles.title}>Add Vaccine</Text>
       </View>
 
       <View style={styles.formContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Event Name"
+          placeholder="Vaccine Name"
           placeholderTextColor="#ccc"
-          value={eventName}
-          onChangeText={setEventName}
+          value={vaccineName}
+          onChangeText={setVaccineName}
         />
 
         <TextInput
           style={styles.input}
-          placeholder="Describe this event"
+          placeholder="Application Date: YYYY-MM-DD"
           placeholderTextColor="#ccc"
-          value={eventDescription}
-          onChangeText={setEventDescription}
+          value={applicationDate}
+          onChangeText={setApplicationDate}
         />
 
         <TextInput
           style={styles.input}
-          placeholder="Event Date and Time: YYYY-MM-DD HH:MM"
+          placeholder="Expiration Date: YYYY-MM-DD"
           placeholderTextColor="#ccc"
-          keyboardType="numeric"
-          value={eventDate}
-          onChangeText={setEventDate}
+          value={expirationDate}
+          onChangeText={setExpirationDate}
         />
 
-        <TouchableOpacity style={styles.button} onPress={handleSaveLog}>
-          <Text style={styles.buttonText}>Save</Text>
+        <TouchableOpacity style={styles.button} onPress={handleAddVaccine}>
+          <Text style={styles.buttonText}>Save Vaccine</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -119,10 +108,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 20, 
+    paddingTop: 20,
     paddingHorizontal: 20,
     backgroundColor: '#2B2943',
-    height: 80, 
+    height: 80,
   },
   title: {
     fontSize: 32,
@@ -136,7 +125,7 @@ const styles = StyleSheet.create({
   formContainer: {
     paddingHorizontal: 20,
     justifyContent: 'center',
-    flex: 1,  
+    flex: 1,
   },
   input: {
     backgroundColor: '#1E1D2F',

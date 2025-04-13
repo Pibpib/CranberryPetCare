@@ -6,9 +6,9 @@ import 'react-native-reanimated';
 import { useUser, UserProvider } from '../contexts/UserContext';
 import { useColorScheme } from '../hooks/useColorScheme';
 import { PetDataProvider } from '../contexts/PetDataContext';
-import { LogDataProvider } from '../contexts/LogDataContext'; // ✅ Import LogDataProvider
+import { LogDataProvider } from '../contexts/LogDataContext';
+import { VaccineDataProvider } from '../contexts/VaccineDataContext'; 
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -19,8 +19,10 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <UserProvider value={user}>
         <PetDataProvider>
-          <LogDataProvider> {/* ✅ Add this wrapper */}
-            <Stack screenOptions={{ headerShown: false }} />
+          <LogDataProvider>
+            <VaccineDataProvider> 
+              <Stack screenOptions={{ headerShown: false }} />
+            </VaccineDataProvider>
           </LogDataProvider>
         </PetDataProvider>
       </UserProvider>

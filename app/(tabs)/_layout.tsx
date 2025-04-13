@@ -20,7 +20,6 @@ import { Tabs } from 'expo-router';
          tabBarBackground: TabBarBackground,
          tabBarStyle: Platform.select({
            ios: {
-             // Use a transparent background on iOS to show the blur effect
              position: 'absolute',
            },
            default: {},
@@ -34,9 +33,9 @@ import { Tabs } from 'expo-router';
          }}
        />
        <Tabs.Screen
-         name="explore"
+         name="calendar"
          options={{
-           title: 'Explore',
+           title: 'Calendar',
            tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
          }}
        />
