@@ -71,7 +71,7 @@ export default function Login() {
                     <Text style={styles.buttonText}>SIGN IN</Text>
                 </Pressable>
                 <Link href="/signup">
-                    <Text>Create an account</Text>
+                    <Text style={styles.linkText}>Create an account</Text>
                 </Link>
             </View>
         </SafeAreaView>
@@ -131,5 +131,8 @@ const styles = StyleSheet.create({
         marginVertical: 15,
         padding: 10,
         borderRadius: 12,
+    },
+    linkText: {
+        color: "white"
     }
 })

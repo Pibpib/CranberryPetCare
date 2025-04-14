@@ -11,7 +11,6 @@ export function useUser() {
 export function UserProvider(props: any) {
   const [user, setUser] = useState<any>(null);
 
-  // Login Function with Error Handling
   async function login(email: string, password: string) {
     try {
       const session = await account.createEmailPasswordSession(email, password);
@@ -25,7 +24,6 @@ export function UserProvider(props: any) {
     }
   }
 
-  // Logout Function with Confirmation
   async function logout() {
     try {
       await account.deleteSession("current");
@@ -36,7 +34,6 @@ export function UserProvider(props: any) {
     }
   }
 
-  // Registration with Auto-Login
   async function register(email: string, password: string) {
     try {
       await account.create(ID.unique(), email, password);
@@ -47,8 +44,6 @@ export function UserProvider(props: any) {
     }
   }
   
-
-  // Initialize Session on App Start
   async function init() {
     try {
       const currentUser = await account.get();

@@ -85,7 +85,7 @@ export default function AddPetScreen() {
 
         <TextInput
           style={styles.input}
-          placeholder="Date of Birth : YYYY-MM-DD HH:MM:mm"
+          placeholder="Date of Birth : YYYY-MM-DD"
           placeholderTextColor="#ccc"
           keyboardType="numeric"
           value={dob}

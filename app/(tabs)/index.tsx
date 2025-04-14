@@ -88,7 +88,7 @@ export default function HomeScreen() {
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => router.push({
-                    pathname: "../(tabs)/addLog",
+                    pathname: "../logs",
                     params: { dogId: item.dogId }
                   })}
                 >
@@ -96,7 +96,7 @@ export default function HomeScreen() {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button}
                   onPress={() => router.push({
-                    pathname: "../(tabs)/addVaccine",
+                    pathname: "../vaccines",
                     params: { dogId: item.dogId }
                   })}
                 >
@@ -113,7 +113,7 @@ export default function HomeScreen() {
 
       <TouchableOpacity 
         style={styles.addButton}
-        onPress={() => router.push('../(tabs)/addPet')} 
+        onPress={() => router.push('../addPet')} 
       >
         <MaterialIcons name="add-circle" size={100} color="#D9D9D9" />
       </TouchableOpacity>

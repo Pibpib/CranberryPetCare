@@ -4,6 +4,7 @@ import { Tabs } from 'expo-router';
  
  import { HapticTab } from '@/components/HapticTab';
  import { IconSymbol } from '@/components/ui/IconSymbol';
+ import AntDesign from '@expo/vector-icons/AntDesign';
  import TabBarBackground from '@/components/ui/TabBarBackground';
  import { Colors } from '@/constants/Colors';
  import { useColorScheme } from '@/hooks/useColorScheme';
@@ -33,10 +34,10 @@ import { Tabs } from 'expo-router';
          }}
        />
        <Tabs.Screen
-         name="calendar"
+         name="schedule"
          options={{
            title: 'Calendar',
-           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+           tabBarIcon: ({ color }) => <AntDesign name="calendar" size={24} color="black" />,
          }}
        />
      </Tabs>

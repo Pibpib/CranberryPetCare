@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     height: 80,
   },
   title: {
-    fontSize: 32,
+    fontSize: 24,
     color: '#fff',
     marginLeft: 10,
     fontWeight: 'bold',

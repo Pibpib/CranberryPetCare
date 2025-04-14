@@ -101,7 +101,7 @@ export default function Signup() {
         </Pressable>
 
         <Link href="/">
-          <Text>Login to your account</Text>
+          <Text style={styles.linkText}>Login to your account</Text>
         </Link>
       </View>
     </SafeAreaView>
@@ -158,5 +158,8 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     padding: 10,
     borderRadius: 12,
+  },
+  linkText: {
+    color: "white"
   }
 });

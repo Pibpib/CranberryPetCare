@@ -36,7 +36,6 @@ export default function AddLogScreen() {
 
   const navigation = useNavigation();
 
-  // Function to handle the saving of the log
   const handleSaveLog = async () => {
     if (!eventName || !eventDescription || !eventDate) {
       alert("Please fill out all fields");
@@ -54,14 +53,14 @@ export default function AddLogScreen() {
       activityDescription: eventDescription,
       activityDate: eventDate,
       userId: userId,
-      dogId: dogId,  // Include the dogId when creating the log
+      dogId: dogId,  
     };
 
     // Add the log using the context's add function
     try {
-      await add(newLog);  // Add log to Appwrite
+      await add(newLog); 
       alert("Log added successfully!");
-      navigation.goBack(); // Navigate back after saving the log
+      navigation.goBack(); 
     } catch (error) {
       alert("Failed to add log, please try again.");
     }
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
     height: 80, 
   },
   title: {
-    fontSize: 32,
+    fontSize: 24,
     color: '#fff',
     marginLeft: 10,
     fontWeight: 'bold',
