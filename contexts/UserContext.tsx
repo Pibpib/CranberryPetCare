@@ -1,6 +1,9 @@
 import { ID } from "react-native-appwrite";
 import { createContext, useContext, useEffect, useState } from "react";
-import { account } from "../lib/appwrite";
+import { account, databases} from "../lib/appwrite";
+import { USER_DATABASE_ID, USER_COLLECTION_ID } from "./UserDataContext";
+import { Query } from "react-native-appwrite";
+
 
 const UserContext = createContext<any>(null);
 
@@ -43,6 +46,50 @@ export function UserProvider(props: any) {
       return null;
     }
   }
+
+  async function updateUser(data: { name: string; email: string; phone: string }) {
+    if (!user) {
+      console.error("No user to update.");
+      return null;
+    }
+  
+    try {
+      //find user's document
+      const response = await databases.listDocuments(
+        USER_DATABASE_ID,
+        USER_COLLECTION_ID,
+        [Query.equal("userId", user.$id)]
+      );
+  
+      if (response.total === 0) {
+        console.error("User document not found.");
+        return null;
+      }
+  
+      const userDocId = response.documents[0].$id;
+  
+      //update the document
+      const updated = await databases.updateDocument(
+        USER_DATABASE_ID,
+        USER_COLLECTION_ID,
+        userDocId,
+        {
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+        }
+      );
+  
+      setUser({ ...user, name: data.name, email: data.email, phone: data.phone });
+  
+      console.log("User updated:", updated);
+      return updated;
+    } catch (error: any) {
+      console.error("Failed to update user:", error.message);
+      return null;
+    }
+  }
+  
   
   async function init() {
     try {
@@ -67,12 +114,14 @@ export function UserProvider(props: any) {
     }
   }  
 
+    
+
   useEffect(() => {
     init();
   }, []);
 
   return (
-    <UserContext.Provider value={{ current: user, login, logout, register, getUser }}>
+    <UserContext.Provider value={{ current: user, login, logout, register, getUser, updateUser }}>
       {props.children}
     </UserContext.Provider>
   );

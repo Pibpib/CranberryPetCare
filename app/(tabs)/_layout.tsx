@@ -5,6 +5,7 @@ import { Tabs } from 'expo-router';
  import { HapticTab } from '@/components/HapticTab';
  import { IconSymbol } from '@/components/ui/IconSymbol';
  import AntDesign from '@expo/vector-icons/AntDesign';
+ import FontAwesome from '@expo/vector-icons/FontAwesome';
  import TabBarBackground from '@/components/ui/TabBarBackground';
  import { Colors } from '@/constants/Colors';
  import { useColorScheme } from '@/hooks/useColorScheme';
@@ -38,6 +39,13 @@ import { Tabs } from 'expo-router';
          options={{
            title: 'Calendar',
            tabBarIcon: ({ color }) => <AntDesign name="calendar" size={24} color="black" />,
+         }}
+       />
+       <Tabs.Screen
+         name="profile"
+         options={{
+           title: 'Profile',
+           tabBarIcon: ({ color }) => <FontAwesome name="user" size={24} color="black" />,
          }}
        />
      </Tabs>

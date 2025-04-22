@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Pressable, Alert } from 'react-native'
 import { useState, useEffect } from 'react'
 import { Link } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -15,7 +15,6 @@ export default function Login() {
     const user = useUser()
 
     useEffect(() => {
-        // check password length
         if (password.length >= 8) {
             setValidPassword(true)
         }
@@ -33,10 +32,20 @@ export default function Login() {
         }
     }, [email])
 
-    const signUp = async () => {
-       const signup = await user.login( email, password )
-       router.navigate('../(tabs)/')
-    }
+    const signIn = async () => {
+        try {
+            const loggedInUser = await user.login(email, password);  // Await login
+            if (loggedInUser) {
+                router.push('../(tabs)/');  // Navigate after login
+            } else {
+                Alert.alert("Login Failed", "Incorrect email or password. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error during login:", error);
+            Alert.alert("Login Failed", "An unexpected error occurred. Please try again.");
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.form}>
@@ -66,7 +75,7 @@ export default function Login() {
                 <Pressable
                     style={(validPassword && validEmail) ? styles.button : styles.buttonDisabled}
                     disabled={(validPassword && validEmail) ? false : true}
-                    onPress={() => signUp()}
+                    onPress={() => signIn()}
                 >
                     <Text style={styles.buttonText}>SIGN IN</Text>
                 </Pressable>

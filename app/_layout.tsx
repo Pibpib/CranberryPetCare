@@ -8,6 +8,7 @@ import { useColorScheme } from '../hooks/useColorScheme';
 import { PetDataProvider } from '../contexts/PetDataContext';
 import { LogDataProvider } from '../contexts/LogDataContext';
 import { VaccineDataProvider } from '../contexts/VaccineDataContext'; 
+import { ReminderDataProvider } from '@/contexts/ReminderContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -21,7 +22,9 @@ export default function RootLayout() {
         <PetDataProvider>
           <LogDataProvider>
             <VaccineDataProvider> 
-              <Stack screenOptions={{ headerShown: false }} />
+              <ReminderDataProvider>
+                <Stack screenOptions={{ headerShown: false }} />
+              </ReminderDataProvider>
             </VaccineDataProvider>
           </LogDataProvider>
         </PetDataProvider>
