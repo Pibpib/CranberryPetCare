@@ -5,6 +5,7 @@ import { useUser } from "@/contexts/UserContext";
 import { usePetData } from "@/contexts/PetDataContext";
 import { router } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
@@ -102,8 +103,13 @@ export default function HomeScreen() {
                 >
                   <MaterialIcons name="vaccines" size={24} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                  <MaterialIcons name="groups" size={24} color="black" />
+                <TouchableOpacity style={styles.button}
+                  onPress={() => router.push({
+                    pathname: "../reminders",
+                    params: { dogId: item.dogId }
+                  })}
+                  >
+                  <MaterialCommunityIcons name="bell" size={24} color="black" />
                 </TouchableOpacity>
               </View>
             </View>

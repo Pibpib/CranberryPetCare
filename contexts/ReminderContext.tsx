@@ -40,12 +40,27 @@ export function ReminderDataProvider(props: any) {
     setReminders(res.documents);
   }
 
+  async function fetchRemindersFromPetId(petId?: string) {
+    const queries = [Query.orderAsc("dateTime")];
+    if (petId) {
+      queries.push(Query.equal("petId", petId));
+    }
+  
+    const res = await databases.listDocuments(
+      REMINDER_DATABASE_ID,
+      REMINDER_COLLECTION_ID,
+      queries
+    );
+    setReminders(res.documents);
+  }
+  
+
   useEffect(() => {
     fetchReminders();
   }, []);
 
   return (
-    <ReminderContext.Provider value={{ reminders, addReminder, deleteReminder, fetchReminders }}>
+    <ReminderContext.Provider value={{ reminders, addReminder, deleteReminder, fetchReminders, fetchRemindersFromPetId }}>
       {props.children}
     </ReminderContext.Provider>
   );
