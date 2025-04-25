@@ -90,7 +90,7 @@ export default function HomeScreen() {
                   style={styles.button}
                   onPress={() => router.push({
                     pathname: "../logs",
-                    params: { dogId: item.dogId }
+                    params: { dogId: item.$id }
                   })}
                 >
                   <AntDesign name="filetext1" size={24} color="black" />
@@ -98,7 +98,7 @@ export default function HomeScreen() {
                 <TouchableOpacity style={styles.button}
                   onPress={() => router.push({
                     pathname: "../vaccines",
-                    params: { dogId: item.dogId }
+                    params: { dogId: item.$id }
                   })}
                 >
                   <MaterialIcons name="vaccines" size={24} color="black" />
@@ -106,7 +106,7 @@ export default function HomeScreen() {
                 <TouchableOpacity style={styles.button}
                   onPress={() => router.push({
                     pathname: "../reminders",
-                    params: { dogId: item.dogId }
+                    params: { dogId: item.$id }
                   })}
                   >
                   <MaterialCommunityIcons name="bell" size={24} color="black" />

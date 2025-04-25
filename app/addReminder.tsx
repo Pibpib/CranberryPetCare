@@ -6,7 +6,7 @@ import { router } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import RNPickerSelect from 'react-native-picker-select';
-import { useReminderData } from '@/contexts/ReminderContext'; 
+import { useReminderData } from '@/contexts/ReminderDataContext'; 
 
 
 export default function AddReminder() {
@@ -14,7 +14,7 @@ export default function AddReminder() {
   const { current: user } = useUser();
   const { addReminder } = useReminderData();
 
-  const [selectedPetId, setSelectedPetId] = useState<string>('');
+  const [selecteddogId, setSelecteddogId] = useState<string>('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
@@ -23,14 +23,14 @@ export default function AddReminder() {
   const navigation = useNavigation();
 
   const handleSubmit = async () => {
-    if (!selectedPetId || !title || !date) {
+    if (!selecteddogId || !title || !date) {
       Alert.alert('Missing Info', 'Please complete all required fields.');
       return;
     }
 
     console.log({
       userId: user?.$id,
-      petId: selectedPetId,
+      dogId: selecteddogId,
       title,
       description,
       date,
@@ -39,7 +39,7 @@ export default function AddReminder() {
 
     const reminderData = {
         userId: user?.$id,
-        petId: selectedPetId,
+        dogId: selecteddogId,
         title,
         description,
         dateTime: date, 
@@ -96,8 +96,8 @@ export default function AddReminder() {
       <View style={styles.pickerContainer}>
         <RNPickerSelect
           placeholder={{ label: 'Select a pet...', value: '' }}
-          onValueChange={(value) => setSelectedPetId(value)}
-          value={selectedPetId}
+          onValueChange={(value) => setSelecteddogId(value)}
+          value={selecteddogId}
           items={pets.map((pet: any) => ({
             label: pet.name || 'Unnamed Pet',
             value: pet.$id,

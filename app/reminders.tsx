@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { useReminderData } from '@/contexts/ReminderContext';
+import { useReminderData } from '@/contexts/ReminderDataContext';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { router } from 'expo-router';
@@ -8,11 +8,12 @@ import { useLocalSearchParams } from 'expo-router';
 
 export default function RemindersScreen() {
   const { dogId } = useLocalSearchParams();
-  const { reminders, fetchRemindersFromPetId } = useReminderData();
+  console.log("dogId param from route:", dogId);
+  const { reminders, fetchRemindersFromdogId } = useReminderData();
 
   useEffect(() => {
     if (dogId) {
-      fetchRemindersFromPetId(dogId as string);
+      fetchRemindersFromdogId(String(dogId).trim());
     }
   }, [dogId]);
   

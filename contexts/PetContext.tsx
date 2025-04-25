@@ -12,13 +12,13 @@ export function PetProvider(props: any) {
   const [pet, setPet] = useState<any>(null);
 
   // Fetch pet details
-  async function getPet(petId: string) {
+  async function getPet(dogId: string) {
     try {
       // Use databases service to fetch the pet document
       const petDetails = await databases.getDocument(
         PET_DATABASE_ID,
         PET_COLLECTION_ID,
-        petId
+        dogId
       );
       setPet(petDetails);
       console.log("Pet details fetched:", petDetails);
