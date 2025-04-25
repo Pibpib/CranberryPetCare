@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useLogData } from '@/contexts/LogDataContext';
 import { useVaccineData } from '@/contexts/VaccineDataContext';
-import { useReminderData } from '@/contexts/ReminderContext';
+import { useReminderData } from '@/contexts/ReminderDataContext';
 import { useUser } from '@/contexts/UserContext';
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { router } from "expo-router";
@@ -34,14 +34,17 @@ export default function Schedule() {
   // Function to handle repeating reminders
   const generateRepeatingReminders = (reminder: any) => {
     const repeatType = reminder.repeat; 
+    if (!['daily', 'weekly', 'monthly'].includes(repeatType)) return [];
     const startDate = new Date(reminder.dateTime);
+    if (isNaN(startDate.getTime())) return [];
     const futureReminders: ScheduleItem[] = [];
     const endDate = new Date();
     endDate.setFullYear(endDate.getFullYear() + 1); 
 
     let currentDate = new Date(startDate);
+    let count = 0;
 
-    while (currentDate <= endDate) {
+    while (currentDate <= endDate && count < 50) {
       futureReminders.push({
         type: 'reminder',
         title: reminder.title,
@@ -56,6 +59,7 @@ export default function Schedule() {
       } else if (repeatType === 'monthly') {
         currentDate.setMonth(currentDate.getMonth() + 1);
       }
+      count++;
     }
 
     return futureReminders;
@@ -84,12 +88,14 @@ export default function Schedule() {
     const userReminders = reminders
       .filter((reminder: any) => reminder.userId === user.$id)
       .flatMap((reminder: any) => {
+        const reminderDate = new Date(reminder.dateTime);
+        if (isNaN(reminderDate.getTime())) return [];
         const futureReminders = reminder.repeat ? generateRepeatingReminders(reminder) : [];
         return [
           {
             type: 'reminder',
             title: reminder.title,
-            date: formatDate(new Date(reminder.dateTime)),
+            date: formatDate(reminderDate),
           },
           ...futureReminders,
         ];

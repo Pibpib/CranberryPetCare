@@ -8,7 +8,7 @@ import { useColorScheme } from '../hooks/useColorScheme';
 import { PetDataProvider } from '../contexts/PetDataContext';
 import { LogDataProvider } from '../contexts/LogDataContext';
 import { VaccineDataProvider } from '../contexts/VaccineDataContext'; 
-import { ReminderDataProvider } from '@/contexts/ReminderContext';
+import { ReminderDataProvider } from '@/contexts/ReminderDataContext';
 
 SplashScreen.preventAutoHideAsync();
 
