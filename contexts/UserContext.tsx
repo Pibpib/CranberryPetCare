@@ -1,8 +1,6 @@
 import { ID } from "react-native-appwrite";
 import { createContext, useContext, useEffect, useState } from "react";
-import { account, databases} from "../lib/appwrite";
-import { USER_DATABASE_ID, USER_COLLECTION_ID } from "./UserDataContext";
-import { Query } from "react-native-appwrite";
+import { account } from "../lib/appwrite";
 
 
 const UserContext = createContext<any>(null);
@@ -47,45 +45,18 @@ export function UserProvider(props: any) {
     }
   }
 
-  async function updateUser(data: { name: string; email: string; phone: string }) {
-    if (!user) {
-      console.error("No user to update.");
-      return null;
-    }
-  
+  async function updateUser(name: string) {
     try {
-      //find user's document
-      const response = await databases.listDocuments(
-        USER_DATABASE_ID,
-        USER_COLLECTION_ID,
-        [Query.equal("userId", user.$id)]
-      );
-  
-      if (response.total === 0) {
-        console.error("User document not found.");
-        return null;
+      if (typeof name !== "string" || name.trim().length === 0) {
+        throw new Error("Name cannot be empty.");
       }
-  
-      const userDocId = response.documents[0].$id;
-  
-      //update the document
-      const updated = await databases.updateDocument(
-        USER_DATABASE_ID,
-        USER_COLLECTION_ID,
-        userDocId,
-        {
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-        }
-      );
-  
-      setUser({ ...user, name: data.name, email: data.email, phone: data.phone });
-  
-      console.log("User updated:", updated);
-      return updated;
+      const updatedName = await account.updateName(name.trim());
+      const refreshedUser = await account.get();
+      setUser(refreshedUser);
+      console.log("User name updated:", refreshedUser);
+      return refreshedUser;
     } catch (error: any) {
-      console.error("Failed to update user:", error.message);
+      console.error("Failed to update name:", error.message);
       return null;
     }
   }

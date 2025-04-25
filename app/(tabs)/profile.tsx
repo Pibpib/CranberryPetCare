@@ -9,7 +9,7 @@ export default function Profile() {
   const [email, setEmail] = useState(user?.email || '');
   const [phone, setPhone] = useState(user?.phone || '');
 
-  const [originalData, setOriginalData] = useState({ name, email, phone });
+  const [originalData, setOriginalData] = useState({ name });
 
   useEffect(() => {
     if (user) {
@@ -18,22 +18,17 @@ export default function Profile() {
       setPhone(user.phone || '');
       setOriginalData({
         name: user.name || '',
-        email: user.email || '',
-        phone: user.phone || '',
       });
     }
   }, [user]);
 
-  const hasChanges =
-    name !== originalData.name ||
-    email !== originalData.email ||
-    phone !== originalData.phone;
+  const hasChanges = name !== originalData.name;
 
   const handleSave = async () => {
     if (updateUser) {
-      const updated = await updateUser({ name, email, phone });
+      const updated = await updateUser(name);
       if (updated) {
-        setOriginalData({ name, email, phone });
+        setOriginalData({ name });
         Alert.alert('Profile Saved', 'Your profile details have been updated.');
       } else {
         Alert.alert('Update Failed', 'Something went wrong. Please try again.');
