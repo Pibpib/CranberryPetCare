@@ -92,7 +92,7 @@ export function ReminderDataProvider(props: any) {
   }, []);
 
   return (
-    <ReminderDataContext.Provider value={{ current: reminders, addReminder, modifyReminder, removeReminder }}>
+    <ReminderDataContext.Provider value={{ reminders, addReminder, modifyReminder, removeReminder, fetchRemindersFromdogId: initReminders }}>
       {props.children}
     </ReminderDataContext.Provider>
   );
