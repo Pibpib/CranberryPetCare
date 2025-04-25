@@ -45,7 +45,7 @@ export default function Signup() {
 
   const signUp = async () => {
     const signup = await user.register(email, password);
-    router.navigate('/login');
+    router.replace('../(tabs)/');
   };
 
   return (
