@@ -51,25 +51,15 @@ Build Cranberry Pet Care from source and install dependencies:
    ```bash
    npm install
    ```
-- Using gradle:
-   ```bash
-   gradle build
-   ```
 
 ### Usage 
 Run the project with
 - Using npm: 
    ```bash
-      npm start
-- Using gradle:
-   ```bash
-    gradle run
+      npm expo start
    
 ### Testing 
 Cranberry Pet Care uses the (test_framework) test framework. Run the test suite with:
 - Using npm:
    ```bash
    npm test
-- Using gradle:
-   ```bash
-   gradle start
